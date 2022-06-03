@@ -30,7 +30,7 @@ void log_init() {
 
     error_assert(flash.initialize(), true, FLASH_ERR_OFFSET, "flash.initialize()");
 
-    //flash.chipErase();
+    flash.chipErase();
     while (flash.busy()) {}
 
     Serial.println("INIT: SD");
@@ -39,7 +39,11 @@ void log_init() {
 
 }
 
-void log_values() {
+bool log_values() {
+
+    if (end_pointer + DATA_FRAME_SIZE * sizeof(float) > FLASH_CAPACITY) {
+        return false;
+    }
     
     data_frame frame;
 
@@ -48,6 +52,8 @@ void log_values() {
     end_pointer += DATA_FRAME_SIZE * sizeof(float);
 
     f_frameIndex++;
+
+    return true;
 
 }
 

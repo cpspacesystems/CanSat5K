@@ -45,7 +45,13 @@ void loop() {
 
     case IN_AIR:
         data_update();
-        log_values();
+
+        if (!log_values()) { // Ran out of flash space
+            state = GROUNDED;
+            log_dumpToSD();
+            Serial.println("Ran out of space in flash. Moving to GROUNDED");
+        }
+
         if (abs(data_velocityX()) < GROUND_VEL_THRESH && data_AGL() < GROUND_ALT_THRESH) {
             if (millis() - f_groundCheckTime > GROUND_TIME_THRESH) {
                 state = GROUNDED;

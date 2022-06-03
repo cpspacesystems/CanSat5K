@@ -3,7 +3,7 @@
 
 void log_init();
 
-void log_values();
+bool log_values();
 
 void log_dumpToSD();
 
